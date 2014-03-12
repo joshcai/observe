@@ -15,7 +15,7 @@ mixin pretty_time(date)
 		= "0" + date.getMinutes()
 	else
 		= date.getMinutes()
-	if date.getHours() > 12
+	if date.getHours() > 11
 		| PM
 	else
 		| AM
@@ -27,12 +27,12 @@ block content
 			each act in acts
 				div.activity
 					div.row
-						div.col-md-6.text-right
+						div.col-xs-6.text-right
 							+pretty_time(act.start)
 							= ' - '
 							if act.stop
 								+pretty_time(act.stop)
-						div.col-md-6.text-left
+						div.col-xs-6.text-left
 							= act.desc + ' '
 			div#current
 				= 'josh is '
