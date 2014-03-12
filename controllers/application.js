@@ -60,7 +60,7 @@ exports.newAct = function(req, res){
 							.sort({'start': -1})
 		query.exec(function(err, activity){
 			if(err){res.send(500);}
-			if(!activity.stop)
+			if(activity && !activity.stop)
 			{
 				activity.stop = Date.now();
 				activity.save(function(err){
