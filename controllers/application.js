@@ -9,19 +9,23 @@ exports.index = function(req, res){
 		if(err) return res.json(500);
 		acts.reverse();
 		var current;
-		if(acts[acts.length-1].stop)
+		if(acts.length > 0)
 		{
-			current = null;
-			if(acts.length == 10)
+			if(acts[acts.length-1].stop)
 			{
-				acts = acts.slice(1);
+				current = null;
+				if(acts.length == 10)
+				{
+					acts = acts.slice(1);
+				}
+			}
+			else
+			{
+				current = acts[acts.length-1];
+				acts = acts.slice(0, acts.length-1);
 			}
 		}
-		else
-		{
-			current = acts[acts.length-1];
-			acts = acts.slice(0, acts.length-1);
-		}
+
 		res.render('index', {acts: acts, login: req.session.login, current: current})
 	})
 
