@@ -92,7 +92,9 @@ exports.newAct = function(req, res){
 }
 
 exports.stop = function(req, res){
-	var query = Activity.findOne()
+	if(req.session.login)
+	{	
+		var query = Activity.findOne()
 							.sort({'start': -1})
 		query.exec(function(err, activity){
 			if(err){res.send(500);}
@@ -108,4 +110,9 @@ exports.stop = function(req, res){
 				res.send(200);
 			}
 		})
+	}
+	else
+	{
+		res.send(500);
+	}
 }
