@@ -47,17 +47,66 @@ block content
 	if login
 		br
 		br
-		form(method="post", action="/new")
-				div.text-center
-					span Next Activity:
-					input.form-control(type="text", name="desc")
-				input(type="submit")
-		br
-		a(href='/stop') Stop 
-		br
-		br
-		br
-		a(href='/logout') Logout
-//- block scripts
-//- 	script(type='text/javascript').
-//- 		var a;
+		div.row
+			div.col-md-6.text-center.centered
+				input.form-control#desc(type="text", name="desc", placeholder="Next activity...")
+				br
+				button#stop.btn.btn-warning(href="/stop") Stop  
+				| &nbsp; &nbsp;
+				a.btn.btn-danger(href="/logout") Logout
+		//- a(href='/stop') Stop 
+		//- br
+		//- br
+		//- br
+		//- a(href='/logout') Logout
+block scripts
+	script(src="/socket.io/socket.io.js")
+	if login
+		script(type='text/javascript').
+			//- add custom onEnter event to jQuery
+			(function($) {
+				$.fn.onEnter = function(func) {
+					this.bind('keypress', function(e) {
+						if (e.keyCode == 13) func.apply(this, [e]);    
+					});               
+					return this; 
+				};
+			})(jQuery);
+			//- init socket.io
+			var socket = io.connect();
+			socket.on('changed', function(){
+				location.reload(true);
+			})
+			//- on document ready 
+			$(function(){
+				//- focus desc
+				$('#desc').focus();
+				//- on enter new activity
+				$('#desc').onEnter(function(){
+					$.ajax({
+						type: "POST",
+						url: "/new",
+						data: {
+							'desc': $(this).val()
+						}
+					});
+					//- send socket event letting people know a change happened
+					socket.emit('changed');
+				});
+				$('#stop').click(function(){
+					$.ajax({
+						type: "GET",
+						url: "/stop"
+					});
+					//- send socket event letting people know a change happened
+					socket.emit('changed');
+				});
+			});
+
+
+	else
+		script(type='text/javascript').
+			var socket = io.connect();
+			socket.on('changed', function(){
+				location.reload(true);
+			})

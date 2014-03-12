@@ -9,6 +9,7 @@ exports.index = function(req, res){
 		if(err) return res.json(500);
 		acts.reverse();
 		var current;
+		var title = 'meow';
 		if(acts.length > 0)
 		{
 			if(acts[acts.length-1].stop)
@@ -22,11 +23,12 @@ exports.index = function(req, res){
 			else
 			{
 				current = acts[acts.length-1];
+				title = current.desc;
 				acts = acts.slice(0, acts.length-1);
 			}
 		}
 
-		res.render('index', {acts: acts, login: req.session.login, current: current})
+		res.render('index', {acts: acts, login: req.session.login, current: current, title: title})
 	})
 
 
@@ -67,7 +69,7 @@ exports.newAct = function(req, res){
 					var act = new Activity(req.body);
 					act.save(function(err){
 						if(err) {res.send(500);}
-						return res.redirect('/');
+						return res.send(200);
 					})
 				})
 			}
@@ -76,7 +78,7 @@ exports.newAct = function(req, res){
 				var act = new Activity(req.body);
 				act.save(function(err){
 					if(err) {res.send(500);}
-					return res.redirect('/');
+					return res.send(200);
 				})
 			}
 		})
@@ -84,7 +86,7 @@ exports.newAct = function(req, res){
 	}
 	else
 	{
-		res.redirect('/');
+		res.send(500);
 	}
 
 }
@@ -98,12 +100,12 @@ exports.stop = function(req, res){
 			{
 				activity.stop = Date.now();
 				activity.save(function(err){
-						return res.redirect('/');
+						return res.send(200);
 					})
 			}
 			else
 			{
-				res.redirect('/');
+				res.send(200);
 			}
 		})
 }
