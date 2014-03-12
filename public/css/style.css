@@ -1,0 +1,55 @@
+.activity{
+  margin-bottom:10px;
+  font-size: 80%;
+}
+
+#current{
+  margin-top: 20px;
+  font-size: 150%;
+}
+
+
+body {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+body {
+  padding: 20px;
+  font: 18px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+a {
+  color: #00B7FF;
+}
+.topfix {
+  margin-top: 10px;
+}
+.bottom-margin {
+  margin-bottom: 12px;
+}
+.bottom-margin20 {
+  margin-bottom: 20px;
+}
+.top-margin0 {
+  margin-top: 0px;
+}
+.centered {
+  margin: 0 auto;
+  float: none;
+}
+.question {
+  background-color: #FFF;
+  border-radius: 5px;
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+  box-shadow: 3px 3px 2px #AAA;
+}
+.answered {
+  background-color: #F0FFFF;
+}
+.img-rounded {
+  margin-top: 5px;
+  box-shadow: 2px 2px 1px #AAA;
+}
