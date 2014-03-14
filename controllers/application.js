@@ -37,7 +37,7 @@ var pretty_time = function(date_string){
 }
 
 exports.index = function(req, res){
-	res.render('index');
+	res.render('index', {login: req.session.login});
 };
 
 exports.info = function(req, res){
@@ -70,7 +70,7 @@ exports.info = function(req, res){
 			acts[i].stop = pretty_time(acts[i].stop);
 		}
 
-		res.json({acts: acts, login: req.session.login, current: current});
+		res.json({acts: acts, current: current});
 	})
 
 
