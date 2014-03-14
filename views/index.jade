@@ -1,66 +1,26 @@
 extends layout
 
-mixin pretty_date(date)
-	= date.getMonth()+1 + "/" + date.getDate() + "/" + date.getFullYear() + "   " 
-
-mixin pretty_time(date)
-	if date.getHours() > 12
-		= date.getHours()-12+":"
-	if date.getHours() < 13
-		if date.getHours() == 0
-			span= "12:"
-		else
-			span= date.getHours()+":"
-	if date.getMinutes() < 10
-		= "0" + date.getMinutes()
-	else
-		= date.getMinutes()
-	if date.getHours() > 11
-		| PM
-	else
-		| AM
-
 block content
 
 	div.row
 		div.col-md-10.centered.text-center
-			each act in acts
-				div.activity
-					div.row
-						div.col-xs-6.text-right
-							+pretty_time(act.start)
-							= ' - '
-							if act.stop
-								+pretty_time(act.stop)
-						div.col-xs-6.text-left
-							= act.desc + ' '
+			div#acts
 			div#current
-				= 'josh is '
-				if current
-					strong= current.desc
-					= ' (since '
-					+pretty_time(current.start)
-					= ')'
-				else
-					= 'doing nothing'
 
 	if login
 		br
 		br
 		div.row
 			div.col-md-6.text-center.centered
-				input.form-control#desc(type="text", name="desc", placeholder="Next activity...")
+				input.form-control#desc(type="text", name="desc", placeholder="Next activity...", autocomplete="off")
 				br
 				button#stop.btn.btn-warning(href="/stop") Stop  
 				| &nbsp; &nbsp;
 				a.btn.btn-danger(href="/logout") Logout
-		//- a(href='/stop') Stop 
-		//- br
-		//- br
-		//- br
-		//- a(href='/logout') Logout
+
 block scripts
 	script(src="/socket.io/socket.io.js")
+	script(src="/js/data.js")
 	if login
 		script(type='text/javascript').
 			//- add custom onEnter event to jQuery
@@ -72,11 +32,6 @@ block scripts
 					return this; 
 				};
 			})(jQuery);
-			//- init socket.io
-			var socket = io.connect();
-			socket.on('changed', function(){
-				location.reload(true);
-			})
 			//- on document ready 
 			$(function(){
 				//- focus desc
@@ -88,25 +43,22 @@ block scripts
 						url: "/new",
 						data: {
 							'desc': $(this).val()
+						},
+						success: function(){
+							socket.emit('changed');
+							reload_info();					
+							$('#desc').val('');
 						}
 					});
-					//- send socket event letting people know a change happened
-					socket.emit('changed');
 				});
 				$('#stop').click(function(){
 					$.ajax({
 						type: "GET",
-						url: "/stop"
+						url: "/stop",
+						success: function(){
+							socket.emit('changed');
+							reload_info();
+						}
 					});
-					//- send socket event letting people know a change happened
-					socket.emit('changed');
 				});
 			});
-
-
-	else
-		script(type='text/javascript').
-			var socket = io.connect();
-			socket.on('changed', function(){
-				location.reload(true);
-			})

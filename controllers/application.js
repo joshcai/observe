@@ -1,15 +1,53 @@
 var mongoose = require('mongoose');
 var Activity = mongoose.model('Activity');
 
+var pretty_time = function(date_string){
+	var temp = '';
+	var date = new Date(date_string);
+	console.log(date);
+	if(date.getHours() > 12)
+	{
+		temp+=(date.getHours()-12)+":";
+	}
+	else
+	{
+		if(date.getHours() == 0)
+		{
+			temp+="12:";
+		}
+		else
+		{
+			temp+=date.getHours()+":";
+		}
+	}
+
+	if(date.getMinutes() < 10)
+	{
+		temp+= "0" + date.getMinutes();
+	}
+	else
+	{
+		temp+= date.getMinutes();
+	}
+	if(date.getHours() > 11)
+		temp+= "PM";
+	else
+		temp+= "AM";
+	return temp;
+}
+
 exports.index = function(req, res){
+	res.render('index');
+};
+
+exports.info = function(req, res){
 	var query = Activity.find()
 							.sort({'start': -1})
 							.limit(10)
 	query.exec(function(err, acts){
-		if(err) return res.json(500);
+		if(err) return res.send(500);
 		acts.reverse();
 		var current;
-		var title = 'meow';
 		if(acts.length > 0)
 		{
 			if(acts[acts.length-1].stop)
@@ -23,12 +61,16 @@ exports.index = function(req, res){
 			else
 			{
 				current = acts[acts.length-1];
-				title = current.desc;
 				acts = acts.slice(0, acts.length-1);
 			}
 		}
+		for(var i = 0; i < acts.length; i ++)
+		{
+			acts[i].start = pretty_time(acts[i].start);
+			acts[i].stop = pretty_time(acts[i].stop);
+		}
 
-		res.render('index', {acts: acts, login: req.session.login, current: current, title: title})
+		res.json({acts: acts, login: req.session.login, current: current});
 	})
 
 

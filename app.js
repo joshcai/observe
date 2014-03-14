@@ -79,7 +79,7 @@ server.listen(app.get('port'), function(){
 
 io.sockets.on('connection', function (socket) {
 	socket.on('changed', function () {
-		io.sockets.emit('changed');
+		socket.broadcast.emit('changed');
 	});
 });
 
