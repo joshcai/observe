@@ -1,0 +1,109 @@
+extends layout
+
+mixin pretty_date(date)
+	= date.getMonth()+1 + "/" + date.getDate() + "/" + date.getFullYear() + "   " 
+	if date.getHours() > 12
+		= date.getHours()-12+":"
+	if date.getHours() < 13
+		if date.getHours() == 0
+			= "12:"
+		else
+			= date.getHours()+":"
+	if date.getMinutes() < 10
+		= "0" + date.getMinutes()
+	else
+		= date.getMinutes()
+	if date.getHours() > 11
+		| PM
+	else
+		| AM
+
+block content
+
+	div.row
+		div.col-md-10.centered.text-center
+			+pretty_date(act.start)
+			= " - "
+			+pretty_date(act.stop)
+			br
+			= act.desc
+			br
+			br
+			a.btn.btn-success(href='/') Home
+	if login
+		br
+		br
+		div.row
+			div.col-md-6.centered.text-center
+				form(method='post')
+					='start '
+					input(type='text', value=act.start.getHours(), name='start_hour')
+					input(type='text', value=act.start.getMinutes(), name='start_min')
+					br
+					='stop '
+					input(type='text', value=act.stop.getHours(), name='stop_hour')
+					input(type='text', value=act.stop.getMinutes(), name='stop_min')
+					br
+					input.form-control(type='text', value=act.desc, name='desc')
+					br
+					input.btn.btn-danger(type='submit')
+	//- 		div#acts
+	//- 		div#current
+
+	//- if login
+	//- 	br
+	//- 	br
+	//- 	div.row
+	//- 		div.col-md-6.text-center.centered
+	//- 			input.form-control#desc(type="text", name="desc", placeholder="Next activity...", autocomplete="off")
+	//- 			br
+	//- 			button#stop.btn.btn-warning(href="/stop") Stop  
+	//- 			| &nbsp; &nbsp;
+	//- 			a.btn.btn-danger(href="/logout") Logout
+	//- else
+
+
+block scripts
+	script(src="/socket.io/socket.io.js")
+	// script(src="/js/data.js")
+	// if login
+	// 	script(type='text/javascript').
+	// 		//- add custom onEnter event to jQuery
+	// 		(function($) {
+	// 			$.fn.onEnter = function(func) {
+	// 				this.bind('keypress', function(e) {
+	// 					if (e.keyCode == 13) func.apply(this, [e]);    
+	// 				});               
+	// 				return this; 
+	// 			};
+	// 		})(jQuery);
+	// 		//- on document ready 
+	// 		$(function(){
+	// 			//- focus desc
+	// 			$('#desc').focus();
+	// 			//- on enter new activity
+	// 			$('#desc').onEnter(function(){
+	// 				$.ajax({
+	// 					type: "POST",
+	// 					url: "/new",
+	// 					data: {
+	// 						'desc': $(this).val()
+	// 					},
+	// 					success: function(){
+	// 						socket.emit('changed');
+	// 						reload_info();					
+	// 						$('#desc').val('');
+	// 					}
+	// 				});
+	// 			});
+	// 			$('#stop').click(function(){
+	// 				$.ajax({
+	// 					type: "GET",
+	// 					url: "/stop",
+	// 					success: function(){
+	// 						socket.emit('changed');
+	// 						reload_info();
+	// 					}
+	// 				});
+	// 			});
+	// 		});

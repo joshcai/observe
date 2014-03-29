@@ -17,6 +17,17 @@ block content
 				button#stop.btn.btn-warning(href="/stop") Stop  
 				| &nbsp; &nbsp;
 				a.btn.btn-danger(href="/logout") Logout
+				br
+				br
+				div.row
+					div.col-md-6
+						input.form-control.search(type="text", name="d", placeholder="Search by desc...", autocomplete="off")
+					div.col-md-6
+						input.form-control.search(type="text", name="t", placeholder="Search by time...", autocomplete="off")
+		br
+		div.row
+			div.col-md-10.centered.text-center
+				div#search
 
 block scripts
 	script(src="/socket.io/socket.io.js")
@@ -48,6 +59,16 @@ block scripts
 							socket.emit('changed');
 							reload_info();					
 							$('#desc').val('');
+						}
+					});
+				});
+				$('.search').onEnter(function(){
+					$.ajax({
+						type: "GET",
+						url: "/search/" + $(this).attr('name') + "/"+$(this).val(),
+						success: function(data){
+							list_act(data, '#search', true);					
+							$(this).val('');
 						}
 					});
 				});
