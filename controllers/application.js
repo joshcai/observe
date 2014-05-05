@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var Activity = mongoose.model('Activity');
+var config = require('../config/config');
 
 
 exports.index = function(req, res){
@@ -49,7 +50,8 @@ exports.login = function(req, res){
 };
 
 exports.doLogin = function(req, res){
-	if(req.body.password == 'testpass')
+	console.log(config.password);
+	if(req.body.password == config.password)
 	{
 		req.session.login = true;
 	}
@@ -119,7 +121,7 @@ exports.postAct = function(req, res){
 }
 
 exports.searchDesc = function(req, res){
-	var query = Activity.find({'desc': req.params.desc})
+	var query = Activity.find({'desc': new RegExp(req.params.desc, "i")})
 							.sort({'start': -1})
 	query.exec(function(err, acts){
 		if(err) return res.send(500);
@@ -138,7 +140,7 @@ exports.searchDesc = function(req, res){
 		var days_since = Math.floor((new Date().getTime() - orig.getTime())/(1000*60*60*24));
 		console.log(days_since);
 		var per_day_time = total_time / days_since;
-		res.json({acts: acts, total_time: total_time, average_time: average_time, per_day_time: per_day_time });
+		res.json({query: req.params.desc, acts: acts, total_time: total_time, average_time: average_time, per_day_time: per_day_time });
 	})
 }
 
