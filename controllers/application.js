@@ -50,7 +50,6 @@ exports.login = function(req, res){
 };
 
 exports.doLogin = function(req, res){
-	console.log(config.password);
 	if(req.body.password == config.password)
 	{
 		req.session.login = true;

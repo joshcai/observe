@@ -68,9 +68,10 @@ var list_act = function(data, div, include_date)
 	});
 	if(data.total_time != null)
 	{
-		var temp = "<span>Total time " + data.acts[0].desc + ": " + num_hours(data.total_time) + "</span><br><br>";
-		temp += "<span>Average time " + data.acts[0].desc + ": " + num_hours(data.average_time) + "</span><br><br>";
-		temp += "<span>Time per day  " + data.acts[0].desc + ": " + num_hours(data.per_day_time) + "</span><br><br>";
+		var temp ="<span><strong>" + data.query + "</strong></span><br><br>";
+		temp += "<span>Total time: " + num_hours(data.total_time) + "</span><br><br>";
+		temp += "<span>Average time: " + num_hours(data.average_time) + "</span><br><br>";
+		temp += "<span>Time per day: " + num_hours(data.per_day_time) + "</span><br><br>";
 		t = temp.concat(t);
 	}
 	$(div).html(t);
