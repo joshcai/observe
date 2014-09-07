@@ -1,3 +1,7 @@
 time tracker
 ---
-to keep track of what you do and let friends see it as well
+to publicly keep track of what i did from 3/12/14 to 5/27/14, has search capabilities
+
+hosted at http://pleaseobserve.me/
+
+fun fact: on average, i slept 8 hours and 14 minutes a day! 
