@@ -70,8 +70,8 @@ var list_act = function(data, div, include_date)
 	{
 		var temp ="<span><strong>" + data.query + "</strong></span><br><br>";
 		temp += "<span>Total time: " + num_hours(data.total_time) + "</span><br><br>";
-		temp += "<span>Average time: " + num_hours(data.average_time) + "</span><br><br>";
-		temp += "<span>Time per day: " + num_hours(data.per_day_time) + "</span><br><br>";
+		temp += "<span>Average time (per session): " + num_hours(data.average_time) + "</span><br><br>";
+		temp += "<span>Time per day (over ~76 days): " + num_hours(data.per_day_time) + "</span><br><br>";
 		t = temp.concat(t);
 	}
 	$(div).html(t);
@@ -89,16 +89,16 @@ var print_data = function(data){
 		document.title = "meow";
 	}
 	list_act(data, '#acts', false);
-	var s = 'josh is ';
+	var s = 'the experiment is over, feel free to search';
 	console.log(data.current);
-	if(data.current)
-	{
-		s+= "<strong>"+data.current.desc+"</strong> (since "+pretty_time(data.current.start)+")";
-	}
-	else
-	{
-		s += 'doing nothing';
-	}
+	// if(data.current)
+	// {
+	// 	s+= "<strong>"+data.current.desc+"</strong> (since "+pretty_time(data.current.start)+")";
+	// }
+	// else
+	// {
+	// 	s += 'doing nothing';
+	// }
 	$('#current').html(s);
 }
 
@@ -110,7 +110,7 @@ var reload_info = function(){
 		success: function(data){
 			print_data(data);
 		}
-	})			
+	})
 }
 
 

@@ -136,7 +136,8 @@ exports.searchDesc = function(req, res){
 		var total_time = total/3600000;
 		var average_time = total_time / acts.length;
 		var orig = new Date(2014,2,12);
-		var days_since = Math.floor((new Date().getTime() - orig.getTime())/(1000*60*60*24));
+		var last = new Date(2014,4,27);
+		var days_since = Math.floor((last.getTime() - orig.getTime())/(1000*60*60*24));
 		console.log(days_since);
 		var per_day_time = total_time / days_since;
 		res.json({query: req.params.desc, acts: acts, total_time: total_time, average_time: average_time, per_day_time: per_day_time });
@@ -146,7 +147,8 @@ exports.searchDesc = function(req, res){
 exports.searchTime = function(req, res){
 
 	console.log(req.params.time);
-	var time = req.params.time.split(" ");
+	var time = req.params.time.replace(/\s/g, "").replace(/\.|-/g, " ").split(" ");
+	console.log(time);
 	for(var i = 0; i < time.length; i++)
 	{
 		time[i] = parseInt(time[i]);
@@ -155,7 +157,6 @@ exports.searchTime = function(req, res){
 	{
 		case 2:
 				time.push(new Date().getFullYear());
-		case 3:
 				time.push(time[0]);
 				time.push(time[1] + 1);
 				time.push(time[2]);
@@ -166,7 +167,7 @@ exports.searchTime = function(req, res){
 				break;
 	}
 
-	// time array: start 0 - month, 1 - day, 2 - year, stop 3 - month, 4 - day, 5 - year 
+	// time array: start 0 - month, 1 - day, 2 - year, stop 3 - month, 4 - day, 5 - year
 	var query = Activity.find().or([{'start': {"$gte": new Date(time[2], time[0] - 1, time[1]), "$lt": new Date(time[5], time[3] - 1, time[4])}},
 									{'stop': {"$gte": new Date(time[2], time[0] - 1, time[1]), "$lt": new Date(time[5], time[3] - 1, time[4])}}])
 							.sort({'start': 1})
@@ -178,7 +179,7 @@ exports.searchTime = function(req, res){
 
 exports.stop = function(req, res){
 	if(req.session.login)
-	{	
+	{
 		var query = Activity.findOne()
 							.sort({'start': -1})
 		query.exec(function(err, activity){

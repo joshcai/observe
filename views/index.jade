@@ -6,6 +6,8 @@ block content
 		div.col-md-10.centered.text-center
 			div#acts
 			div#current
+			br
+			| (lasted 3.12.2014 - 5.27.2014)
 
 	if login
 		br
@@ -14,36 +16,52 @@ block content
 			div.col-md-6.text-center.centered
 				input.form-control#desc(type="text", name="desc", placeholder="Next activity...", autocomplete="off")
 				br
-				button#stop.btn.btn-warning(href="/stop") Stop  
+				button#stop.btn.btn-warning(href="/stop") Stop
 				| &nbsp; &nbsp;
 				a.btn.btn-danger(href="/logout") Logout
-				br
-				br
-				div.row
-					div.col-md-6
-						input.form-control.search(type="text", name="d", placeholder="Search by desc...", autocomplete="off")
-					div.col-md-6
-						input.form-control.search(type="text", name="t", placeholder="Search by time...", autocomplete="off")
-		br
-		div.row
-			div.col-md-10.centered.text-center
-				div#search
+	div.row
+		div.col-md-6.text-center.centered
+			br
+			br
+			div.row
+				div.col-md-6
+					input.form-control.search(type="text", name="d", placeholder="By description (contains)...", autocomplete="off")
+				div.col-md-6
+					input.form-control.search(type="text", name="t", placeholder="By date ('3.14' or '3.14-3.16')...", autocomplete="off")
+	br
+	div.row
+		div.col-md-10.centered.text-center
+			div#search
 
 block scripts
 	script(src="/socket.io/socket.io.js")
 	script(src="/js/data.js")
+
+	script(type='text/javascript').
+		//- add custom onEnter event to jQuery
+		(function($) {
+			$.fn.onEnter = function(func) {
+				this.bind('keypress', function(e) {
+					if (e.keyCode == 13) func.apply(this, [e]);
+				});
+				return this;
+			};
+		})(jQuery);
+		$('.search').onEnter(function(){
+			$.ajax({
+				type: "GET",
+				url: "/search/" + $(this).attr('name') + "/"+$(this).val(),
+				success: function(data){
+					list_act(data, '#search', true);
+					$(this).val('');
+				}
+			});
+		});
+
 	if login
 		script(type='text/javascript').
-			//- add custom onEnter event to jQuery
-			(function($) {
-				$.fn.onEnter = function(func) {
-					this.bind('keypress', function(e) {
-						if (e.keyCode == 13) func.apply(this, [e]);    
-					});               
-					return this; 
-				};
-			})(jQuery);
-			//- on document ready 
+
+			//- on document ready
 			$(function(){
 				//- focus desc
 				$('#desc').focus();
@@ -57,18 +75,8 @@ block scripts
 						},
 						success: function(){
 							socket.emit('changed');
-							reload_info();					
+							reload_info();
 							$('#desc').val('');
-						}
-					});
-				});
-				$('.search').onEnter(function(){
-					$.ajax({
-						type: "GET",
-						url: "/search/" + $(this).attr('name') + "/"+$(this).val(),
-						success: function(data){
-							list_act(data, '#search', true);					
-							$(this).val('');
 						}
 					});
 				});
