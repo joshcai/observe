@@ -89,8 +89,7 @@ var print_data = function(data){
 		document.title = "meow";
 	}
 	list_act(data, '#acts', false);
-	var s = 'the experiment is over, feel free to search';
-	console.log(data.current);
+	var s = 'i stopped updating, but feel free to search';
 	// if(data.current)
 	// {
 	// 	s+= "<strong>"+data.current.desc+"</strong> (since "+pretty_time(data.current.start)+")";

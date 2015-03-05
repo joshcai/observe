@@ -131,14 +131,11 @@ exports.searchDesc = function(req, res){
 		}
 		var hour = Math.floor(total/3600000);
 		var min = Math.round((total/3600000 - hour)*60);
-		console.log(total/3600000);
-		console.log(min);
 		var total_time = total/3600000;
 		var average_time = total_time / acts.length;
 		var orig = new Date(2014,2,12);
 		var last = new Date(2014,4,27);
 		var days_since = Math.floor((last.getTime() - orig.getTime())/(1000*60*60*24));
-		console.log(days_since);
 		var per_day_time = total_time / days_since;
 		res.json({query: req.params.desc, acts: acts, total_time: total_time, average_time: average_time, per_day_time: per_day_time });
 	})
@@ -146,9 +143,7 @@ exports.searchDesc = function(req, res){
 
 exports.searchTime = function(req, res){
 
-	console.log(req.params.time);
 	var time = req.params.time.replace(/\s/g, "").replace(/\.|-/g, " ").split(" ");
-	console.log(time);
 	for(var i = 0; i < time.length; i++)
 	{
 		time[i] = parseInt(time[i]);
@@ -156,13 +151,13 @@ exports.searchTime = function(req, res){
 	switch(time.length)
 	{
 		case 2:
-				time.push(new Date().getFullYear());
+				time.push(2014);
 				time.push(time[0]);
 				time.push(time[1] + 1);
 				time.push(time[2]);
 				break;
 		case 4:
-				time.splice(2, 0, new Date().getFullYear());
+				time.splice(2, 0, 2014);
 				time.push(time[2]);
 				break;
 	}
